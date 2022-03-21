@@ -45,7 +45,7 @@ $ python process_data.py $CSD_code
 The important structural properties including largest cavity diameter (LCD),pore-limiting diameter (PLD), and helium void fraction, etc., were calculatedusing  open-source software Zeo++. 
 
 
-## Training
+## Model training
 ```
 $ python -u train_fold.py --dense_output_nonlinearity silu --distance_matrix_kernel bessel --epoch 3 --batch_size 64 --data_dir ./data --gas_type $1 --pressure $2 --save_dir ./test/mof_rbf --use_global_feature
 ```
