@@ -8,7 +8,7 @@ Please see dependencies in requirements.txt
 ## CSD-MOFDB
 We released the trained data on the Magen website, which can be obtained by the following command.
 ```
-$wget https://matgen.nscc-gz.cn/
+$ wget https://matgen.nscc-gz.cn/
 ```
 ## NIST-ISODB
 | Gas type| MOFs name   | Data source |
@@ -35,15 +35,27 @@ $wget https://matgen.nscc-gz.cn/
 ## Process
 ### How to generate local features?
 First, the CSD package need to install on your server and use CSD Python API to obtain CIF files. We create a script in utils files, and run the following command to generate local features file.
-···
-python process_data.py $CSD_code
-···
+```
+$ python process_data.py $CSD_code
+```
 
 ### How to obtain global features?
 The important structural properties including largest cavity diameter (LCD),pore-limiting diameter (PLD), and helium void fraction, etc., were calculatedusing  open-source software Zeo++. 
 
 
 ## Training
+```
+$ python -u train_fold.py --dense_output_nonlinearity silu --distance_matrix_kernel bessel --epoch 3 --batch_size 64 --data_dir ./data --gas_type $1 --pressure $2 --save_dir ./test/mof_rbf --use_global_feature
+```
+
+## Transfer learning
+```
+python -u pressure_adapt.py --data_dir ./data --gas_type $1 --pressure $2 --epoch 300 --save_dir ./mof_adapted_rbf --ori_dir ./mof_model_rbf/v3/$1_$2 --lr 0.0007 --adapter_dim 8
+```
 
 ## Prediction
+```
+$ python -u real_test.py --data_dir 287-Cu-MOF --gas_type CH4 --pressure 5e4 --save_dir ./mof_adapted_rbf
+```
+
 
