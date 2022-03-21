@@ -34,8 +34,14 @@ $wget https://matgen.nscc-gz.cn/
 
 ## Process
 ### How to generate local features?
+First, the CSD package need to install on your server and use CSD Python API to obtain CIF files. We create a script in utils files, and run the following command to generate local features file.
+···
+python process_data.py $CSD_code
+···
 
 ### How to obtain global features?
+The important structural properties including largest cavity diameter (LCD),pore-limiting diameter (PLD), and helium void fraction, etc., were calculatedusing  open-source software Zeo++. 
+
 
 ## Training
 
