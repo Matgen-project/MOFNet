@@ -10,7 +10,7 @@ Please see dependencies in requirements.txt
 ## CSD-MOFDB
 We released the trained data on the Magen website, which can be obtained by the following command.
 ```
-$ wget https://matgen.nscc-gz.cn/
+$ wget https://matgen.nscc-gz.cn/xx
 ```
 ## NIST-ISODB
 | Gas type| MOFs name   | Data source |
