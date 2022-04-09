@@ -43,10 +43,10 @@ We obtained 54 MOFs with 1876 pressure data points covering N2, CO2 and CH4 adso
 |--NIST-ISODB
 ||--CIFs  
 ||--global_features  
-||--isotherm_data  
+||--isotherm_data  #experimental data.
 ||--local_features  
-||--MOFNet  
-||--mol_unit  
+||--MOFNet   #MOFNet predicting results.
+||--mol_unit  #molecule unit in mol format
 ||--README
 ```
 
