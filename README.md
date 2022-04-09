@@ -10,8 +10,8 @@ Please see dependencies in requirements.txt
 
 We released the training and testing data on the [Matgen website](https://matgen.nscc-gz.cn/dataset.html), which can be obtained by the following command.
 ```
-$ wget https://matgen.nscc-gz.cn/dataset/download/CSD-MOFDB_20220328.tar.gz
-$ wget https://matgen.nscc-gz.cn/dataset/download/NIST-ISODB_20220328.tar.gz
+$ wget https://matgen.nscc-gz.cn/dataset/download/CSD-MOFDB_xx.tar.gz
+$ wget https://matgen.nscc-gz.cn/dataset/download/NIST-ISODB_xx.tar.gz
 ```
 
 You can construct the data directory from the downloaded data as follows.
