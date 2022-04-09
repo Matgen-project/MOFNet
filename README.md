@@ -24,8 +24,8 @@ You can construct the data directory from the downloaded data as follows.
 
 ## CSD-MOFDB
 We collected 7306, 6998 and 8562 MOFs for N2, CO2 and CH4 from the Cambridge Structural Database (CSD, version 5.4) dataset. 
-GCMC simulations were carried out to calculate the adsorption data of MOFs for CO$_2$, N2 and CH4 using RASPA software. 
-We set 8 pressure points from the range of 0.2 kPa - 80 kPa, 5 kPa – 20,000 kPa and 100 kPa – 10,000kPa for N2, CO2 and CH4, respectively.
+GCMC simulations were carried out to calculate the adsorption data of MOFs for CO$_2$, N$_2$ and CH$_4$ using RASPA software. 
+We set 8 pressure points from the range of 0.2 kPa - 80 kPa, 5 kPa – 20,000 kPa and 100 kPa – 10,000kPa for  CO$_2$, N$_2$ and CH$_4$, respectively.
 ```
 | --CSD-MOFDB
 ||--CIFs  # CIF format files.
@@ -37,7 +37,7 @@ We set 8 pressure points from the range of 0.2 kPa - 80 kPa, 5 kPa – 20,000 kP
 ```
 
 ## NIST-ISODB
-We obtained 54 MOFs with 1876 pressure data points covering N2, CO2 and CH4 adsorbate molecules from the NIST/ARPA-E database.
+We obtained 54 MOFs with 1876 pressure data points covering  CO$_2$, N$_2$ and CH$_4$ adsorbate molecules from the NIST/ARPA-E database.
 
 ```
 |--NIST-ISODB
