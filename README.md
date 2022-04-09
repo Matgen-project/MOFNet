@@ -28,11 +28,11 @@ GCMC simulations were carried out to calculate the adsorption data of MOFs for C
 We set 8 pressure points from the range of 0.2 kPa - 80 kPa, 5 kPa – 20,000 kPa and 100 kPa – 10,000kPa for N2, CO2 and CH4, respectively.
 ```
 | --CSD-MOFDB
-||--CIFs  
+||--CIFs  # CIF format files.
 ||--global_features  
-||--label_by_GCMC  
+||--label_by_GCMC  #calculated adsorption data by GCMC method.
 ||--local_features  
-||--mol_unit  
+||--mol_unit   #molecule unit in mol format
 ||--README
 ```
 
@@ -41,7 +41,7 @@ We obtained 54 MOFs with 1876 pressure data points covering N2, CO2 and CH4 adso
 
 ```
 |--NIST-ISODB
-||--CIFs  
+||--CIFs   #CIF format files.
 ||--global_features  
 ||--isotherm_data  #experimental data.
 ||--local_features  
