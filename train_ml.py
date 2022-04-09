@@ -1,56 +1,8 @@
 import numpy as np
-from featurization.data_utils import load_data_from_df, construct_loader_gf
 from sklearn import tree, svm, ensemble
 from featurization.data_utils import load_data_from_df, construct_loader_gf, data_prefetcher
 from argparser import parse_train_args,parse_ml_args
-import logging
-
-def splitdata(length,fold,index):
-    fold_length = length // fold
-    index_list = np.arange(length)
-    if index == 1:
-        val = index_list[:fold_length]
-        test = index_list[fold_length * (fold - 1):]
-        train = index_list[fold_length : fold_length * (fold - 1)]
-    elif index == fold:
-        val = index_list[fold_length * (fold - 1):]
-        test = index_list[fold_length * (fold - 2) : fold_length * (fold - 1)]
-        train = index_list[:fold_length * (fold - 2)]
-    else:
-        val = index_list[fold_length * (index - 1) : fold_length * index]
-        test = index_list[fold_length * (index - 2) : fold_length * (index - 1)]
-        train = np.concatenate([index_list[:fold_length * (index - 2)],index_list[fold_length * index:]])
-    return train,val,test
-
-
-def set_seed(seed):
-    np.random.seed(seed)  # numpy
-
-def printParams(param_dic, logger=None):
-    print("=========== Parameters ==========")
-    for k,v in model_params.items():
-        print(f'{k} : {v}')
-    print("=================================")
-    print()
-    if logger:
-        for k,v in model_params.items():
-            logger.info(f'{k} : {v}')
-
-def applyIndexOnList(lis,idx):
-    ans = []
-    for _ in idx:
-        ans.append(lis[_])
-    return ans
-
-def get_logger(save_dir):
-    logger = logging.getLogger(__name__)
-    logger.setLevel(level = logging.INFO)
-    handler = logging.FileHandler(save_dir + "/test_log.txt")
-    handler.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    return logger
+from utils import *
 
 def get_metric_dict(predicted, ground_truth):
     mae = np.mean(np.abs(predicted - ground_truth))
@@ -76,13 +28,11 @@ if __name__ == '__main__':
     fstd = f.std(axis=0)
     f = (f - fmean) / fstd
 
-    # add local
     Xs = [np.mean(_[0][:,1:],axis=0) for _ in X]
     f = np.concatenate((Xs,f),axis=1)
     
     printParams(model_params,logger)
     fold_num = model_params['fold']
-    # test_maes, test_rmses,test_pccs = [], [], []
     test_errors = []
     idx_list = np.arange(len(X))
     set_seed(model_params['seed'])
@@ -120,26 +70,11 @@ if __name__ == '__main__':
         future = model.predict(test_f) * std + mean
 
         test_y = test_y * std + mean
-
-        # test_mae = np.mean(np.abs(future - test_y))
-        # test_rmse = np.sqrt(np.mean((future - test_y)**2))
-        # test_pcc = np.corrcoef(future, test_y)[0][1]
-
-        # test_maes.append(test_mae)
-        # test_rmses.append(test_rmse)
-        # test_pccs.append(test_pcc)
         test_error = get_metric_dict(future, test_y)
         for _ in test_error.keys():
             print('Fold: {:02d}, Test {}: {:.7f}'.format(fold_idx, _, test_error[_]))
             logger.info('Fold: {:02d}, Test {}: {:.7f}'.format(fold_idx, _, test_error[_]))
         test_errors.append(test_error)
-        # print('Fold: {:02d}, Test MAE: {:.7f}, Test RMSE: {:.7f}, Test PCC: {:.7f}'.format(fold_idx, test_mae, test_rmse, test_pcc))
-        # logger.info('Fold: {:02d}, Test MAE: {:.7f}, Test RMSE: {:.7f}, Test PCC: {:.7f}'.format(fold_idx, test_mae, test_rmse, test_pcc))
-    # err_mean = np.mean(test_rmses)
-    # err_std  = np.std(test_rmses)
-    # output_str = 'Test results of {:02d}-Folds : MAE : {:.7f}({:.7f}), RMSE : {:.7f}({:.7f}), PCC : {:.7f}({:.7f})'.format(fold_num,np.mean(test_maes),np.std(test_maes),np.mean(test_rmses),np.std(test_rmses),np.mean(test_pccs),np.std(test_pccs))
-    # print(output_str)
-    # logger.info(output_str)
     for _ in test_errors[0].keys():
         err_mean = np.mean([__[_] for __ in test_errors])
         err_std  = np.std([__[_] for __ in test_errors])

@@ -5,98 +5,11 @@ import torch.nn.functional as F
 import numpy as np
 import time
 from featurization.data_utils import load_data_from_df, construct_loader_gf, data_prefetcher
-from transformer import make_model
+from models.transformer import make_model
 from argparser import parse_train_args
-import logging
-
-
-def splitdata(length,fold,index):
-    fold_length = length // fold
-    index_list = np.arange(length)
-    if index == 1:
-        val = index_list[:fold_length]
-        test = index_list[fold_length * (fold - 1):]
-        train = index_list[fold_length : fold_length * (fold - 1)]
-    elif index == fold:
-        val = index_list[fold_length * (fold - 1):]
-        test = index_list[fold_length * (fold - 2) : fold_length * (fold - 1)]
-        train = index_list[:fold_length * (fold - 2)]
-    else:
-        val = index_list[fold_length * (index - 1) : fold_length * index]
-        test = index_list[fold_length * (index - 2) : fold_length * (index - 1)]
-        train = np.concatenate([index_list[:fold_length * (index - 2)],index_list[fold_length * index:]])
-    return train,val,test
+from utils import *
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-
-class CheckpointHandler(object):
-    def __init__(self, save_dir, max_save=5):
-        self.save_dir = save_dir
-        self.max_save = max_save
-        self.init_info()
-
-    def init_info(self):
-        os.makedirs(self.save_dir, exist_ok=True)
-        self.metric_dic = {}
-        if os.path.exists(self.save_dir+'/eval_log.txt'):
-            with open(self.save_dir+'/eval_log.txt','r') as f:
-                ls = f.readlines()
-            for l in ls:
-                l = l.strip().split(':')
-                assert len(l) == 2
-                self.metric_dic[l[0]] = float(l[1])
-
-    
-    def save_model(self, model, model_params, epoch, eval_metric):
-        max_in_dic = max(self.metric_dic.values()) if len(self.metric_dic) else 1e9
-        if eval_metric > max_in_dic:
-            return
-        if len(self.metric_dic) == self.max_save:
-            self.remove_last()
-        self.metric_dic['model-'+str(epoch)+'.pt'] = eval_metric
-        state = {"params":model_params, "epoch":epoch, "model":model.state_dict()}
-        torch.save(state, self.save_dir + '/' + 'model-'+str(epoch)+'.pt')
-        log_str = '\n'.join(['{}:{:.7f}'.format(k,v) for k,v in self.metric_dic.items()])
-        with open(self.save_dir+'/eval_log.txt','w') as f:
-            f.write(log_str)
-
-
-    def remove_last(self):
-        last_model = sorted(list(self.metric_dic.keys()),key = lambda x:self.metric_dic[x])[-1]
-        if os.path.exists(self.save_dir+'/'+last_model):
-            os.remove(self.save_dir+'/'+last_model)
-        self.metric_dic.pop(last_model)
-# d_atom = X[0][0].shape[1]
-# model_params = {
-#     'd_atom': d_atom,
-#     'd_model': 1024,
-#     'N': 2,
-#     'h': 16,
-#     'N_dense': 2,
-#     'lambda_attention': 0.33,
-#     'lambda_distance': 0.33,
-#     'leaky_relu_slope': 0.1,
-#     'dense_output_nonlinearity': 'relu',
-#     'distance_matrix_kernel': 'softmax',
-#     'init_type': 'uniform',
-#     'dropout': 0.1,
-#     'aggregation_type': 'mean',
-#     'd_feature': 8,
-#     'n_generator_layers':2,
-#     'use_global_feature': True,
-#     'd_mid_list': [128,512],
-#     'd_ff_list': None,
-#     'use_ffn_only': True,
-#     'adj_mask':'cosineqk',
-#     'warmup_step':2000,
-#     'lr':0.001,
-#     'epoch':100,
-#     'fold':10,
-#     'seed':9999
-# }
-
-
 
 def warmupRdecayFactor(step):
     warmup_step = model_params['warmup_step']
@@ -104,13 +17,6 @@ def warmupRdecayFactor(step):
         return step / warmup_step
     else:
         return (warmup_step / step) ** 0.5
-
-def warmupLdecayFactor(step):
-    warmup_step = model_params['warmup_step']
-    if step < warmup_step:
-        return step / warmup_step
-    else:
-        return warmup_step / step
 
 
 def train(epoch, train_loader, optimizer, scheduler):
@@ -126,7 +32,7 @@ def train(epoch, train_loader, optimizer, scheduler):
         batch_mask = torch.sum(torch.abs(node_features), dim=-1) != 0
 
         optimizer.zero_grad()
-        output = model(node_features, batch_mask, adjacency_matrix, distance_matrix, None, global_features)
+        output = model(node_features, batch_mask, adjacency_matrix, distance_matrix, global_features)
         loss = F.mse_loss(output, y)
         loss.backward()
         step_loss = loss.cpu().detach().numpy()
@@ -149,7 +55,7 @@ def test(data_loader, mean, std):
     while data is not None:
         adjacency_matrix, node_features, distance_matrix, global_features, y = data
         batch_mask = torch.sum(torch.abs(node_features), dim=-1) != 0
-        output = model(node_features, batch_mask, adjacency_matrix, distance_matrix, None, global_features)
+        output = model(node_features, batch_mask, adjacency_matrix, distance_matrix, global_features)
         ys += list(y.cpu().detach().numpy().reshape(-1))
         futures += list(output.cpu().detach().numpy().reshape(-1))
         batch_idx += 1
@@ -163,39 +69,6 @@ def test(data_loader, mean, std):
     smape = 2 * np.mean(np.abs(futures-ys)/(np.abs(futures)+np.abs(ys)))
 
     return {'MAE':mae, 'RMSE':rmse, 'PCC':pcc, 'sMAPE':smape}
-
-def printParams(param_dic, logger=None):
-    print("=========== Parameters ==========")
-    for k,v in model_params.items():
-        print(f'{k} : {v}')
-    print("=================================")
-    print()
-    if logger:
-        for k,v in model_params.items():
-            logger.info(f'{k} : {v}')
-
-def applyIndexOnList(lis,idx):
-    ans = []
-    for _ in idx:
-        ans.append(lis[_])
-    return ans
-
-def set_seed(seed):
-    torch.manual_seed(seed)  # set seed for cpu 
-    torch.cuda.manual_seed(seed)  # set seed for gpu
-    torch.backends.cudnn.deterministic = True  # cudnn
-    torch.backends.cudnn.benchmark = False
-    np.random.seed(seed)  # numpy
-
-def get_logger(save_dir):
-    logger = logging.getLogger(__name__)
-    logger.setLevel(level = logging.INFO)
-    handler = logging.FileHandler(save_dir + "/log.txt")
-    handler.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    return logger
 
 if __name__ == '__main__':
 

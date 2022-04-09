@@ -12,7 +12,6 @@ from tools.get_atom_features import get_atom_features
 from tools.get_bond_features import get_bond_features_en
 from tools.remove_waters import remove_waters, remove_single_oxygen, get_largest_components
 import numpy as np
-from sklearn.metrics import pairwise_distances
 
 mol_name = sys.argv[1]
 mol = csd.molecule(mol_name)
@@ -34,7 +33,6 @@ atom_features = np.array([get_atom_features(atom) for atom in mol.atoms])
 row, col = get_bond_features_en(mol)
 
 pos_matrix = np.array([[atom.coordinates.x, atom.coordinates.y, atom.coordinates.z] for atom in mol.atoms])
-# dist_matrix = pairwise_distances(pos_matrix)
 
 mol_features = [atom_features, row, col, pos_matrix]
 
