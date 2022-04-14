@@ -2,6 +2,7 @@
 MOFNet is a deep learning model that can predict adsorption isotherm for MOFs based on hierarchical representation, graph transformer and pressure adaptive mechanism. We elaborately design a hierarchical representation to describe the MOFs structure. A graph transformer is used to capture atomic level information, which can help learn chemical features required at low-pressure conditions. A pressure adaptive mechanism is used to interpolate and extrapolate the given limited data points by transfer learning, which can predict adsorption isotherms on a wider pressure range by only one model. The following is the architecture of MOFNet.
 
 <img src="https://github.com/Matgen-project/MOFNet/blob/main/image/Fig1.jpg" width="100%">
+
 ## Installation
 Please see dependencies in requirements.txt
 
