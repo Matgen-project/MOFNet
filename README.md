@@ -65,17 +65,19 @@ The important structural properties including largest cavity diameter (LCD),pore
 
 ## Model training
 ```
-$ python -u train_mofnet.py --data_dir <data_dir> --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_single> --use_global_feature
+$ python -u train_mofnet.py --data_dir data/CSD-MOFDB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_single> --use_global_feature
 ```
 
 ## Transfer learning
 ```
-python -u pressure_adapt.py --data_dir <data_dir> --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_all> --ori_dir <save_dir_single>/<gas_type>_<pressure> --adapter_dim 8
+python -u pressure_adapt.py --data_dir data/CSD-MOFDB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_all> --ori_dir <save_dir_single>/<gas_type>_<pressure> --adapter_dim 8
 ```
 
 ## Prediction
 ```
-$ python -u nist_test.py --data_dir <data_dir> --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_all> --img_dir <img_dir>
+$ python -u nist_test.py --data_dir data/NIST-ISODB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_all> --img_dir <img_dir>
 ```
 
 
+## Acknowledgments
+The implementation of the Graph Transformer module is built upon [Molecule Attention Transformer](https://github.com/ardigen/MAT).
