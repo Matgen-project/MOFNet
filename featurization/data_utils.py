@@ -1,7 +1,3 @@
-"""
-
-"""
-
 import logging
 import os
 import pickle
@@ -9,7 +5,6 @@ import pickle
 import numpy as np
 import pandas as pd
 import torch
-from sklearn.metrics import pairwise_distances
 from torch.utils.data import Dataset, dataset
 import json
 import copy

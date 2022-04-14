@@ -1,7 +1,6 @@
 from ast import mod
 from turtle import forward
 from .egnn import *
-# from .gin import *
 from .painn import *
 from .schnet import *
 from .dimenet_pp import *
@@ -10,8 +9,6 @@ from torch.nn import functional as F
 
 def make_baseline_model(d_atom, model_name, N=2, d_model=128, use_global_feature=False, d_feature=9, **kwargs):
     model = None
-    # if model_name == 'gin':
-    #     model = GraphIsomorphismNetwork(input_dim=d_atom, hidden_dim=d_model, num_convs=N)
     if model_name == 'egnn':
         representation = EGNN(in_node_nf=d_atom, hidden_nf=d_model, n_layers=N, attention=True)
         use_adj = True
