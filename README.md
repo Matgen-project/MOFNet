@@ -56,7 +56,7 @@ We obtained 54 MOFs with 1876 pressure data points covering  N<sub>2</sub>, CO<s
 ### How to generate local features?
 First, the CSD package need to install on your server and use CSD Python API to obtain CIF files. We create a script in utils files, and run the following command to generate local features file.
 ```
-python process_csd_data.py <CSD_code>
+$ python process_csd_data.py <CSD_code>
 ```
 
 ### How to obtain global features?
@@ -65,17 +65,17 @@ The important structural properties including largest cavity diameter (LCD),pore
 
 ## Model training
 ```
-python -u train_mofnet.py --data_dir data/CSD-MOFDB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_single> --use_global_feature
+$ python -u train_mofnet.py --data_dir data/CSD-MOFDB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_single> --use_global_feature
 ```
 
 ## Transfer learning
 ```
-python -u pressure_adapt.py --data_dir data/CSD-MOFDB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_all> --ori_dir <save_dir_single>/<gas_type>_<pressure> --adapter_dim 8
+$ python -u pressure_adapt.py --data_dir data/CSD-MOFDB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_all> --ori_dir <save_dir_single>/<gas_type>_<pressure> --adapter_dim 8
 ```
 
 ## Prediction
 ```
-python -u nist_test.py --data_dir data/NIST-ISODB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_all> --img_dir <img_dir>
+$ python -u nist_test.py --data_dir data/NIST-ISODB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_all> --img_dir <img_dir>
 ```
 
 
