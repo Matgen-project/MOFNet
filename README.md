@@ -54,9 +54,9 @@ We obtained 54 MOFs with 1876 pressure data points covering  N<sub>2</sub>, CO<s
 ## Processing
 
 ### How to generate local features?
-First, the CSD package need to install on your server and use CSD Python API to obtain CIF files. We create a script in utils files, and run the following command to generate local features file.
+First, the CSD package need to install on your server and use CSD Python API to obtain CIF files. We create a script in process file, and run the following command to generate local features file.
 ```
-$ python process_csd_data.py <CSD_code>
+$ python process/process_csd_data.py <CSD_code>
 ```
 
 ### How to obtain global features?
