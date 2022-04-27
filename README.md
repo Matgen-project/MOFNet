@@ -89,3 +89,8 @@ We also welecome users to use our [3DStructGen UI interface](https://matgen.nscc
 
 ## Acknowledgments
 The implementation of the Graph Transformer module is built upon [Molecule Attention Transformer](https://github.com/ardigen/MAT).
+
+### Reference:
+[1]. Maziarka, {\L}ukasz and Danel, Tomasz and Mucha, S{\l}awomir and Rataj, Krzysztof and Tabor, Jacek and Jastrz{\k{e}}bski, Stanis{\l}aw: Molecule attention transforme. arXiv preprint arXiv:2002.08264 2020
+
+[2]. Pin Chen, Yu Wang, Hui Yan, Sen Gao, Zexin Xu, Yangzhong Li, Qing Mo, Junkang Huang, Jun Tao, GeChuanqi Pan, Jiahui Li & Yunfei Du. 3DStructGen: an interactive web-based 3D structure generation for non-periodic molecule and crystal. J Cheminform 12, 7 (2020). https://doi.org/10.1186/s13321-020-0411-2
