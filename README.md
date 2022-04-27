@@ -84,7 +84,7 @@ We also welecome users to use our [3DStructGen UI interface](https://matgen.nscc
 # Click "Caculate" button and use the APP of "Artificical Intelligence - MOF"
 # Choose the uptake gas and pressure range you want to calculate and then submit.
 ```
-<img src="https://github.com/Matgen-project/CrystalNet/blob/2680940afc507a4009455df36280ef85f7035283/3dstructgen-mof.png" width=90%>
+<img src="https://github.com/Matgen-project/MOFNet/blob/3a97a3a487d72b5387e66c5651b5235eb85125da/image/3dstructgen-mof.png" width=90%>
 
 
 ## Acknowledgments
