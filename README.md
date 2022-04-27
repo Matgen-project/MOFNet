@@ -78,6 +78,14 @@ $ python -u pressure_adapt.py --data_dir data/CSD-MOFDB --gas_type <gas_type> --
 $ python -u nist_test.py --data_dir data/NIST-ISODB --gas_type <gas_type> --pressure <pressure> --save_dir <save_dir_all> --img_dir <img_dir>
 ```
 
+We also welecome users to use our [3DStructGen UI interface](https://matgen.nscc-gz.cn/3dstructgen/v2/mod/3dstructgen_newUI.html) to predict crystal properties by the following steps:
+```
+# Upload your CIF crystal files into 3DStuctGen interface;
+# Click "Caculate" button and use the APP of "Artificical Intelligence - MOF"
+# Choose the uptake gas and pressure range you want to calculate and then submit.
+```
+<img src="https://github.com/Matgen-project/CrystalNet/blob/2680940afc507a4009455df36280ef85f7035283/3dstructgen-mof.png" width=90%>
+
 
 ## Acknowledgments
 The implementation of the Graph Transformer module is built upon [Molecule Attention Transformer](https://github.com/ardigen/MAT).
