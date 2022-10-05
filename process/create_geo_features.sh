@@ -22,9 +22,16 @@ rm  ${data_dir}/${name}.sa
 #argument 6 and 7  
 #   ../network -ha -vol 0 0 50000 ~/wsl/work/clean/$i >/dev/null
 ~/bin/network -ha -vol 0 0 50000 ${data_dir}/${i} >/dev/null
-voidfract=`head -n 1  ${data_dir}/${name}.vol | awk '{print $10}'` porevolume=`head -n 1  ${data_dir}/${name}.vol | awk '{print $12}'`
+voidfract=`head -n 1  ${data_dir}/${name}.vol | awk '{print $10}'` 
+porevolume=`head -n 1  ${data_dir}/${name}.vol | awk '{print $12}'`
 rm  ${data_dir}/${name}.vol
-CN=`echo "scale=6;${CN}/${cell_num}" | bc`
-PV=`echo "scale=6;${PV}/${cell_num}" | bc`
-OMS=`echo "scale=6;${OMS}/${cell_num}" | bc`
-printf "%-20s%-10s%-10s%-10s%-10s%-10s%-10s%-15s%-15s\n" $name $Density $PLD $LCD $VSA $GSA $voidfract $porevolume $chan_num_sa
+
+~/bin/network -oms /tmp/${i}.cif >/dev/null
+oms=`tail -n 1  /tmp/${i}.oms | awk '{print $3}'`
+rm /tmp/${i}.oms
+
+chan_num_sa=`echo "scale=6;${chan_num_sa}/${cell_num}" | bc`
+porevolume=`echo "scale=6;${porevolume}/${cell_num}" | bc`
+oms=`echo "scale=6;${oms}/${cell_num}" | bc`
+#printf "%-20s%-10s%-10s%-10s%-10s%-10s%-10s%-15s%-15s\n" $name $Density $PLD $LCD $VSA $GSA $voidfract $porevolume $chan_num_sa $oms
+echo "$i,$LCD,$PLD,$VSA,$GSA,$Density,$voidfract,$porevolume,$chan_num_sa,$oms" 
